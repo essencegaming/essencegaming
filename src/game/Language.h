@@ -86,7 +86,19 @@ enum MangosStrings
     //LANG_RA_BUSY                      = 60, not used
     LANG_RA_USER                        = 61,
     LANG_RA_PASS                        = 62,
-    // Room for more level 0              63-99 not used
+    // Name Announce
+	LANG_SYSTEMMESSAGE_TRIALGM          = 63,
+	LANG_SYSTEMMESSAGE_MODERATOR        = 64,
+    LANG_SYSTEMMESSAGE_GAMEMASTER       = 65,
+	LANG_SYSTEMMESSAGE_HEADGM           = 66,
+	LANG_SYSTEMMESSAGE_DEVELOPER        = 67,
+	LANG_SYSTEMMESSAGE_HEADDEVS         = 68,
+	LANG_SYSTEMMESSAGE_ADMIN            = 69,
+	LANG_SYSTEMMESSAGE_HEADADMIN        = 70,
+	LANG_SYSTEMMESSAGE_COOWNER          = 71,
+    LANG_SYSTEMMESSAGE_ADMINISTRATOR    = 72,
+	LANG_SYSTEMMESSAGE_CONSOLE          = 73,
+    // Room for more level 0              74-99 not used
 
     // level 1 chat
     LANG_GLOBAL_NOTIFY                  = 100,

@@ -123,7 +123,7 @@ bool ChatHandler::HandleNpcWhisperCommand(const char* args)
 }
 //----------------------------------------------------------
 
-// global announce
+// Administrator .announce [System Message] command
 bool ChatHandler::HandleAnnounceCommand(const char* args)
 {
     if(!*args)
@@ -132,6 +132,58 @@ bool ChatHandler::HandleAnnounceCommand(const char* args)
     sWorld.SendWorldText(LANG_SYSTEMMESSAGE,args);
     return true;
 }
+
+// Moderator .nameannounce Command with colored name and GM rank
+bool ChatHandler::HandleNameAnnounceCommand(const char* args)
+{
+    int32 strid = 0;
+
+   if(!*args)
+        return false;
+
+    switch(m_session->GetSecurity())
+    {
+      case SEC_TRIALGM:
+        strid = LANG_SYSTEMMESSAGE_TRIALGM;
+        break;
+      case SEC_MODERATOR:
+        strid = LANG_SYSTEMMESSAGE_MODERATOR;
+        break;
+      case SEC_GAMEMASTER:
+        strid = LANG_SYSTEMMESSAGE_GAMEMASTER;
+        break;
+	  case SEC_HEADGM:
+        strid = LANG_SYSTEMMESSAGE_HEADGM;
+        break;
+	  case SEC_DEVELOPER:
+        strid = LANG_SYSTEMMESSAGE_DEVELOPER;
+        break;
+	  case SEC_HEADDEVS:
+        strid = LANG_SYSTEMMESSAGE_HEADDEVS;
+        break;
+	  case SEC_ADMIN:
+        strid = LANG_SYSTEMMESSAGE_ADMIN;
+        break;
+	  case SEC_HEADADMIN:
+        strid = LANG_SYSTEMMESSAGE_HEADADMIN;
+        break;
+	  case SEC_COOWNER:
+        strid = LANG_SYSTEMMESSAGE_COOWNER;
+        break;
+	  case SEC_ADMINISTRATOR:
+        strid = LANG_SYSTEMMESSAGE_ADMINISTRATOR;
+        break;
+	  case SEC_CONSOLE:
+        strid = LANG_SYSTEMMESSAGE_CONSOLE;
+        break;
+      default:
+        return false;
+    }
+
+	sWorld.SendWorldText(strid, m_session->GetPlayerName(), args);
+
+    return true;
+ }
 
 //notification player at the screen
 bool ChatHandler::HandleNotifyCommand(const char* args)
