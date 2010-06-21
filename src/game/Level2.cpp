@@ -37,6 +37,7 @@
 #include "GMTicketMgr.h"
 #include "WaypointManager.h"
 #include "Util.h"
+#include "Config/Config.h"
 #include <cctype>
 #include <iostream>
 #include <fstream>
@@ -2122,6 +2123,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     uint32 total_player_time = 0;
     uint32 level = 0;
     uint32 latency = 0;
+	uint32 realmID = sConfig.GetIntDefault("RealmId", 0);
 
     // get additional information from Player object
     if(target)
@@ -2161,12 +2163,21 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     AccountTypes security = SEC_PLAYER;
     std::string last_login = GetMangosString(LANG_ERROR);
 
-    QueryResult* result = loginDatabase.PQuery("SELECT username,gmlevel,last_ip,last_login FROM account WHERE id = '%u'",accId);
+    QueryResult* result = loginDatabase.PQuery("SELECT a.username, a.gmlevel, a.last_ip, a.last_login, a_fp.accountid, a_fp.security, a_fp.realmid FROM account AS a LEFT JOIN account_forcepermission AS a_fp on a.id = a_fp.accountid WHERE a.id = '%u' ORDER BY FIELD(a_fp.realmid,'%u') DESC", accId, realmID);
     if(result)
     {
         Field* fields = result->Fetch();
         username = fields[0].GetCppString();
-        security = (AccountTypes)fields[1].GetUInt32();
+
+		if( fields[4].GetUInt32() != NULL && fields[4].GetUInt32() == accId )				// checking to see if account has forced perms
+		{
+			if( fields[6].GetUInt32() != NULL && fields[6].GetUInt32() == realmID )			// if it does, check to see if it has it on the realm
+				security = (AccountTypes)fields[5].GetUInt16();											// if it does, apply forced perm
+			else
+				security = (AccountTypes)fields[1].GetUInt32();											// if it doesn't for realm, apply regular perms
+    	}
+		else
+			security = (AccountTypes)fields[1].GetUInt32();	
 
         if(GetAccessLevel() >= security)
         {

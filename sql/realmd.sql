@@ -78,6 +78,19 @@ INSERT INTO `account` VALUES
 UNLOCK TABLES;
 
 --
+-- Table structure for table `account_forcedpermission`
+--
+
+DROP TABLE IF EXISTS `account_forcedpermission`
+CREATE TABLE `account_forcepermission` (
+  `AccountID` int(11) unsigned NOT NULL DEFAULT '0',
+  `realmID` int(3) unsigned NOT NULL DEFAULT '0',
+  `Security` int(3) unsigned NOT NULL DEFAULT '0',
+  `Comment` varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`AccountID`,`realmID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
 -- Table structure for table `account_banned`
 --
 
